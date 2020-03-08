@@ -18,9 +18,8 @@ namespace personal_site_api.Models
         [Required]
         public string Body { get; set; }
 
-        //must be nullible because it is nullible in dto
-        //we get 500 error converting from nullible datetime to required datetime and vice versa
+        //nullible in dto
         //sql server sees nullible datetimes as type datetime2
-        public DateTime? DatePosted { get; set; }
+        public DateTime DatePosted { get; set; }
     }
 }

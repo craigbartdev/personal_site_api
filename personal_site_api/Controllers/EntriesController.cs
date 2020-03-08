@@ -11,7 +11,7 @@ using System.Web.Http;
 namespace personal_site_api.Controllers
 {
     //uses default api routes from Startup configuration
-    public class EntriesController : BaseApiController
+    public class EntriesController : ApiController
     {
         private ApplicationDbContext _context;
 
@@ -25,6 +25,20 @@ namespace personal_site_api.Controllers
             _context.Dispose();
         }
 
+        [HttpGet]
+        public IHttpActionResult GetEntries()
+        {
+            //use of dto is a bit redundant but good practice
+            var entries = _context.Entries.ToList().OrderByDescending(e => e.DatePosted)
+                .Select(e => new EntryDto {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Body = e.Body,
+                    DatePosted = e.DatePosted
+                });
+
+            return Ok(entries);
+        }
 
         [HttpGet]
         public IHttpActionResult GetEntry(int id)
@@ -45,6 +59,7 @@ namespace personal_site_api.Controllers
             return Ok(entryDto);
         }
 
+        //dto should only have title and body
         [HttpPost]
         public IHttpActionResult PostEntry(EntryDto entryDto)
         {

@@ -175,7 +175,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\EntriesController.cs" />
+    <Compile Include="Dtos\CommentDto.cs" />
     <Compile Include="Dtos\EntryDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -190,7 +192,12 @@
     <Compile Include="Migrations\202003020119204_AddEntriesToDb.Designer.cs">
       <DependentUpon>202003020119204_AddEntriesToDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003040143026_AddCommentsToDb.cs" />
+    <Compile Include="Migrations\202003040143026_AddCommentsToDb.Designer.cs">
+      <DependentUpon>202003040143026_AddCommentsToDb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -223,6 +230,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003020119204_AddEntriesToDb.resx">
       <DependentUpon>202003020119204_AddEntriesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003040143026_AddCommentsToDb.resx">
+      <DependentUpon>202003040143026_AddCommentsToDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
