@@ -32,6 +32,9 @@ namespace personal_site_api
             //allow camelCase
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
+            //make datetime look nicer when sending in json
+            jsonFormatter.SerializerSettings.DateFormatString = "M/d/yyyy h:mm tt";
+
             //allow custom routes
             httpConfig.MapHttpAttributeRoutes();
 

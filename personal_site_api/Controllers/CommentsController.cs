@@ -25,6 +25,21 @@ namespace personal_site_api.Controllers
             _context.Dispose();
         }
 
+        [HttpGet]
+        public IHttpActionResult GetAllComments()
+        {
+            var comments = _context.Comments.ToList()
+                .Select(c => new CommentDto
+                {
+                    Id = c.Id,
+                    Body = c.Body,
+                    EntryId = c.EntryId,
+                    DatePosted = c.DatePosted
+                });
+
+            return Ok(comments);
+        }
+
         //api/comments/entry/entryId
         [HttpGet]
         [Route("entry/{entryId:int}")]
@@ -86,6 +101,20 @@ namespace personal_site_api.Controllers
             Uri returnUri = new Uri(Request.RequestUri + "/" + comment.Id);
 
             return Created(returnUri, commentDto);
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteComment(int id)
+        {
+            var customerInDb = _context.Comments.SingleOrDefault(c => c.Id == id);
+
+            if (customerInDb == null)
+                return NotFound();
+
+            _context.Comments.Remove(customerInDb);
+            _context.SaveChanges();
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }
