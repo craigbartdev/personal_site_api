@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Serialization;
 using Owin;
+using personal_site_api.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,19 @@ namespace personal_site_api
         {
             HttpConfiguration httpConfig = new HttpConfiguration();
 
+            ConfigureOAuthTokenGeneration(app);
+
             ConfigureWebApi(httpConfig);
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             app.UseWebApi(httpConfig);
+        }
+
+        public void ConfigureOAuthTokenGeneration(IAppBuilder app)
+        {
+            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
         }
 
         //need this to make web api work and to accept json

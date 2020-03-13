@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using personal_site_api.Infrastructure;
 using personal_site_api.Models;
 using System;
 using System.Collections.Generic;
@@ -9,9 +11,21 @@ using System.Web.Http;
 
 namespace personal_site_api.Controllers
 {
+    //extended by account controller
     public class BaseApiController : ApiController
     {
         private ModelFactory _modelFactory;
+        private ApplicationUserManager _AppUserManager = null;
+
+        protected ApplicationUserManager AppUserManager
+        {
+            get
+            {
+                return _AppUserManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+        }
+
+        public BaseApiController() { }
 
         protected ModelFactory TheModelFactory
         {
@@ -19,7 +33,7 @@ namespace personal_site_api.Controllers
             {
                 if (_modelFactory == null)
                 {
-                    _modelFactory = new ModelFactory(Request);
+                    _modelFactory = new ModelFactory(Request, AppUserManager);
                 }
                 return _modelFactory;
             }
