@@ -10,6 +10,8 @@ using System.Web;
 
 namespace personal_site_api.Services
 {
+    //configure and send email with sendgrid and system.net.mail
+    //must use gmail because yahoo does not allow sending emails from other origins
     public class EmailService : IIdentityMessageService
     {
         public async Task SendAsync(IdentityMessage message) {
@@ -26,6 +28,7 @@ namespace personal_site_api.Services
             myMessage.Text = message.Body;
             myMessage.Html = message.Body;
 
+            //for sendgrid
             var credentials = new NetworkCredential(ConfigurationManager.AppSettings["emailService:Username"],
                                                     ConfigurationManager.AppSettings["emailService:Password"]);
 

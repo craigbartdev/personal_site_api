@@ -11,12 +11,14 @@ namespace personal_site_api.Controllers
     [RoutePrefix("api/accounts")]
     public class AccountsController : BaseApiController
     {
+        [Authorize]
         [Route("users")]
         public IHttpActionResult GetUsers()
         {
             return Ok(AppUserManager.Users.ToList().Select(u => TheModelFactory.Create(u)));
         }
 
+        [Authorize]
         [Route("user/{id:guid}", Name = "GetUserById")]
         public async Task<IHttpActionResult> GetUser(string Id)
         {
@@ -28,6 +30,25 @@ namespace personal_site_api.Controllers
             return NotFound();
         }
 
+        [Authorize]
+        [HttpDelete]
+        [Route("user/{id:guid}")]
+        public async Task<IHttpActionResult> DeleteUser(string id)
+        {
+            var appUser = await AppUserManager.FindByIdAsync(id);
+
+            if (appUser == null)
+                return NotFound();
+
+            IdentityResult result = await AppUserManager.DeleteAsync(appUser);
+
+            if (!result.Succeeded)
+                return GetErrorResult(result);
+
+            return Ok();
+        }
+
+        [AllowAnonymous]
         [Route("create")]
         public async Task<IHttpActionResult> CreateUser(CreateUserBindingModel createUserModel)
         {
@@ -55,6 +76,7 @@ namespace personal_site_api.Controllers
             return Created(locationHeader, TheModelFactory.Create(user));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("ConfirmEmail", Name = "ConfirmEmailRoute")]
         public async Task<IHttpActionResult> ConfirmEmail(string userId = "", string code = "")
@@ -73,6 +95,7 @@ namespace personal_site_api.Controllers
                 return GetErrorResult(result);
         }
 
+        [Authorize]
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -87,23 +110,6 @@ namespace personal_site_api.Controllers
                 return GetErrorResult(result);
 
             await AppUserManager.SendEmailAsync(userId, "Password Change", "Your password has been changed");
-
-            return Ok();
-        }
-
-        [HttpDelete]
-        [Route("user/{id:guid}")]
-        public async Task<IHttpActionResult> DeleteUser(string id)
-        {
-            var appUser = await AppUserManager.FindByIdAsync(id);
-
-            if (appUser == null)
-                return NotFound();
-
-            IdentityResult result = await AppUserManager.DeleteAsync(appUser);
-
-            if (!result.Succeeded)
-                return GetErrorResult(result);
 
             return Ok();
         }
